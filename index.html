@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snapbbrain-AI</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <div>
+        <h1>Snapbbrain-AI</h1>
+        <p>Private AI Assistant for Everyday Tasks</p>
+      </div>
+      <span class="status">● Local Demo</span>
+    </header>
+
+    <section class="hero">
+      <h2>Your everyday AI, with privacy in mind.</h2>
+      <p>Ask questions, summarize text, rewrite content and plan your work.</p>
+    </section>
+
+    <section class="suggestions">
+      <button onclick="usePrompt('Summarize: Artificial intelligence can help people automate repetitive tasks and improve productivity.')">Summarize</button>
+      <button onclick="usePrompt('Rewrite: I want to improve my productivity every day.')">Rewrite</button>
+      <button onclick="usePrompt('Make a study plan')">Study Plan</button>
+      <button onclick="usePrompt('How can I protect my privacy while using AI?')">Privacy</button>
+    </section>
+
+    <section id="chat" class="chat" aria-live="polite">
+      <div class="message assistant">
+        <strong>Snapbbrain-AI</strong>
+        <p>Hello! How can I help you today?</p>
+      </div>
+    </section>
+
+    <form id="chatForm" class="input-area">
+      <input id="message" autocomplete="off" placeholder="Ask Snapbbrain-AI..." required>
+      <button type="submit">Send</button>
+    </form>
+
+    <footer>
+      Prototype • Privacy-first design • Built for future local/edge AI
+    </footer>
+  </main>
+
+  <script src="/script.js"></script>
+</body>
+</html>
