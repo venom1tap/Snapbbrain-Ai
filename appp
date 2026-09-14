@@ -1,0 +1,69 @@
+from flask import Flask, request, jsonify, send_from_directory
+from datetime import datetime
+import re
+
+app = Flask(__name__, static_folder=".")
+
+def clean_text(text):
+    return re.sub(r"\s+", " ", text or "").strip()
+
+def local_assistant(message):
+    text = clean_text(message)
+    lower = text.lower()
+
+    if not text:
+        return "Please enter a message."
+
+    if any(word in lower for word in ["hello", "hi", "hey"]):
+        return "Hello! I'm Snapbbrain-AI. I can help with everyday questions, writing, summaries and productivity."
+
+    if "who are you" in lower or "what are you" in lower:
+        return "I'm Snapbbrain-AI, a privacy-focused AI assistant prototype for everyday tasks."
+
+    if "time" in lower:
+        return f"The current server time is {datetime.now().strftime('%I:%M %p')}."
+
+    if lower.startswith("summarize:"):
+        content = text.split(":", 1)[1].strip()
+        if not content:
+            return "Add some text after 'Summarize:'."
+        words = content.split()
+        if len(words) <= 35:
+            return "Summary: " + content
+        return "Summary: " + " ".join(words[:35]) + "..."
+
+    if lower.startswith("rewrite:"):
+        content = text.split(":", 1)[1].strip()
+        if not content:
+            return "Add some text after 'Rewrite:'."
+        return "Improved version: " + content.capitalize()
+
+    if "study plan" in lower:
+        return ("Simple study plan: 1) Choose one topic. 2) Study for 40 minutes. "
+                "3) Take a 10-minute break. 4) Practice questions for 30 minutes. "
+                "5) Review mistakes.")
+
+    if "project" in lower:
+        return ("For Snapbbrain-AI, start with the chat interface, connect a local AI model, "
+                "add voice/document features, then test privacy and performance.")
+
+    if "privacy" in lower:
+        return ("Privacy-first idea: keep sensitive processing on-device where possible, "
+                "minimize data collection, avoid unnecessary logging, and clearly tell users "
+                "what data is processed.")
+
+    return ("I can help with everyday tasks. Try: 'Summarize: ...', 'Rewrite: ...', "
+            "'Make a study plan', or ask a simple question.")
+
+@app.route("/")
+def home():
+    return send_from_directory(".", "index.html")
+
+@app.route("/api/chat", methods=["POST"])
+def chat():
+    data = request.get_json(silent=True) or {}
+    message = data.get("message", "")
+    return jsonify({"reply": local_assistant(message)})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
